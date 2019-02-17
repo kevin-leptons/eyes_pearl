@@ -47,34 +47,38 @@ chrome.runtime.onInstalled.addListener(async () => {
             return
         }
 
-        let cssVariables = `
-            :root {
-                --bg-color: ${conf.bg_color};
-                --fg-color: ${conf.fg_color};
-                --pm-color: ${conf.pm_color};
-            }
-
-            * {
-                background: var(--bg-color) !important;
-                color: var(--fg-color) !important;
-                border-color: var(--fg-color) !important;
-                outline-color: var(--fg-color) !important;
-            }
-
-            a {
-                color: var(--pm-color) !important;
-            }
-            a:hover {
-                background: var(--fg-color) !important;
-                color: var(--bg-color) !important;
-            }
-        `
-        let data = {
-            code: cssVariables,
-            runAt: 'document_start',
-            matchAboutBlank: true,
-            cssOrigin: 'user'
-        }
-        chrome.tabs.insertCSS(id, data)
+        set_css(id, conf)
     })
 })
+
+function set_css(id, conf) {
+    let cssVariables = `
+        :root {
+            --bg-color: ${conf.bg_color};
+            --fg-color: ${conf.fg_color};
+            --pm-color: ${conf.pm_color};
+        }
+
+        * {
+            background: var(--bg-color) !important;
+            color: var(--fg-color) !important;
+            border-color: var(--fg-color) !important;
+            outline-color: var(--fg-color) !important;
+        }
+
+        a {
+            color: var(--pm-color) !important;
+        }
+        a:hover {
+            background: var(--fg-color) !important;
+            color: var(--bg-color) !important;
+        }
+    `
+    let data = {
+        code: cssVariables,
+        runAt: 'document_start',
+        matchAboutBlank: true,
+        cssOrigin: 'user'
+    }
+    chrome.tabs.insertCSS(id, data)
+}

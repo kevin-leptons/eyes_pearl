@@ -18,6 +18,7 @@
         "storage",
         "tabs",
         "notifications",
+        "chrome://newtab/",
         "*://*/*"
     ],
     "options_page": "option.html",
