@@ -13,12 +13,17 @@
         "scripts": ["js/shared.js", "js/background.js"],
         "persistent": false
     },
-    "content_scripts": [{
-        "js": ["js/shared.js", "js/content.js"],
-        "matches": ["*://*/*"]
-    }],
-    "permissions": ["declarativeContent", "storage"],
+    "permissions": [
+        "declarativeContent",
+        "storage",
+        "tabs",
+        "notifications",
+        "*://*/*"
+    ],
     "options_page": "option.html",
     "browser_action": {
-    }
+    },
+    "web_accessible_resources": [
+        "css/content.css"
+    ]
 }

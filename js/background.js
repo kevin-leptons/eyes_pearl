@@ -10,17 +10,24 @@ async function set_icon(enabled) {
 }
 
 async function toggle_enabled() {
+    console.log('Begin to toggle')
+
     let conf = await store.get()
     conf.enabled = !conf.enabled
 
     store.set('enabled', conf.enabled)
     await set_icon(conf.enabled)
+
+    console.log('End Toggle');
 }
 
 chrome.runtime.onInstalled.addListener(async () => {
     store.get().
     then(conf => {
         set_icon(conf.enabled)
+    }).
+    catch(e => {
+        console.error(e)
     })
 
     chrome.browserAction.onClicked.addListener(tab => {
@@ -28,5 +35,40 @@ chrome.runtime.onInstalled.addListener(async () => {
         catch(e => {
             console.error(e)
         })
+    })
+
+    chrome.tabs.onUpdated.addListener(async (id, info, tab) => {
+        let conf = await store.get()
+        if (!conf.enabled) {
+            return
+        }
+        let url = new URL(tab.url)
+        if (url.protocol === 'chrome:') {
+            return
+        }
+
+        let cssVariables = `
+            :root {
+                --bg-color: ${conf.bg_color};
+                --fg-color: ${conf.fg_color};
+                --pm-color: ${conf.pm_color};
+            }
+
+            * {
+                background: var(--bg-color) !important;
+                color: var(--fg-color) !important;
+                border-color: var(--fg-color) !important;
+                outline-color: var(--fg-color) !important;
+            }
+
+            a {
+                color: var(--pm-color) !important;
+            }
+        `
+        let data = {
+            code: cssVariables,
+            runAt: 'document_start'
+        }
+        chrome.tabs.insertCSS(id, data)
     })
 })
