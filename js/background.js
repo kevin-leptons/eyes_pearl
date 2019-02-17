@@ -43,7 +43,7 @@ chrome.runtime.onInstalled.addListener(async () => {
             return
         }
         let url = new URL(tab.url)
-        if (url.protocol === 'chrome:') {
+        if (['http:', 'https:'].indexOf(url.protocol) < 0) {
             return
         }
 
@@ -64,10 +64,16 @@ chrome.runtime.onInstalled.addListener(async () => {
             a {
                 color: var(--pm-color) !important;
             }
+            a:hover {
+                background: var(--fg-color) !important;
+                color: var(--bg-color) !important;
+            }
         `
         let data = {
             code: cssVariables,
-            runAt: 'document_start'
+            runAt: 'document_start',
+            matchAboutBlank: true,
+            cssOrigin: 'user'
         }
         chrome.tabs.insertCSS(id, data)
     })
