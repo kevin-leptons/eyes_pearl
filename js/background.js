@@ -60,7 +60,7 @@ function set_css(id, conf) {
         }
 
         * {
-            background-color: var(--bg-color) !important;
+            background: var(--bg-color) !important;
             color: var(--fg-color) !important;
             border-color: var(--fg-color) !important;
             outline-color: var(--fg-color) !important;
